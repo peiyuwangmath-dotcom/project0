@@ -1,0 +1,12 @@
+{% extends "accounts/base.html" %}
+{% block title %}注册{% endblock %}
+{% block content %}
+    <h1>创建你的账号</h1>
+    <p class="intro">填写学号、姓名并设置密码，注册后即可进入个人页面。</p>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {% include "accounts/form_fields.html" %}
+        <button type="submit">注册并进入</button>
+    </form>
+    <p>已有账号？<a href="{% url 'login' %}">前往登录</a></p>
+{% endblock %}

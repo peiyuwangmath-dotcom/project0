@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}用户中心{% endblock %} · 模型评测</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f4f6f8; color: #172c3a; font-family: system-ui, "Microsoft YaHei", sans-serif; line-height: 1.7; }
+        main { width: min(640px, calc(100% - 40px)); margin: 48px auto; }
+        .brand { color: #175e54; font-weight: 650; }
+        .card { margin-top: 20px; padding: 28px; border: 1px solid #dbe2e7; border-radius: 14px; background: white; }
+        h1 { margin: 0 0 8px; font-size: 30px; }
+        h2 { font-size: 21px; }
+        .intro, .help { color: #536675; }
+        .field { margin: 20px 0; }
+        label { display: block; margin-bottom: 6px; font-weight: 650; }
+        input { width: 100%; padding: 10px 12px; border: 1px solid #9eafb9; border-radius: 8px; font: inherit; }
+        input:focus { outline: 3px solid #b8dcd5; border-color: #216d60; }
+        .help { font-size: 14px; margin-top: 6px; }
+        .help ul { margin: 4px 0; padding-left: 22px; }
+        .errorlist { color: #a42121; padding-left: 22px; margin: 8px 0; }
+        button, .button { display: inline-block; padding: 10px 22px; border: 0; border-radius: 8px; background: #176858; color: white; font: inherit; cursor: pointer; text-decoration: none; }
+        button:hover, .button:hover { background: #105144; }
+        button:focus-visible, a:focus-visible { outline: 3px solid #3876b1; outline-offset: 4px; }
+        a { color: #176858; }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+        .secondary { background: #e7eeec; color: #175e54; }
+        .secondary:hover { background: #d5e3de; }
+        dl { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; }
+        dt { color: #536675; }
+        dd { margin: 0; overflow-wrap: anywhere; }
+        footer { margin-top: 20px; color: #536675; font-size: 14px; }
+    </style>
+</head>
+<body>
+<main>
+    <div class="brand">模型评测</div>
+    <section class="card">{% block content %}{% endblock %}</section>
+    <footer>用同一个问题，查看不同模型的回答。</footer>
+</main>
+</body>
+</html>

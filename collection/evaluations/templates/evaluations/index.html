@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型评测 · 固定回答练习</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f4f6f8; color: #172c3a; font-family: system-ui, "Microsoft YaHei", sans-serif; line-height: 1.7; }
+        main { width: min(760px, calc(100% - 40px)); margin: 64px auto; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 6px; background: #dcece9; color: #175e54; font-size: 14px; }
+        h1 { margin: 14px 0 8px; font-size: clamp(28px, 5vw, 36px); }
+        .intro, .hint { color: #536675; }
+        .card { margin-top: 28px; padding: 28px; border: 1px solid #dbe2e7; border-radius: 14px; background: white; }
+        label { display: block; margin-bottom: 10px; font-weight: 650; }
+        textarea { width: 100%; min-height: 150px; padding: 14px; border: 1px solid #9eafb9; border-radius: 8px; font: inherit; resize: vertical; }
+        textarea:focus { outline: 3px solid #b8dcd5; border-color: #216d60; }
+        button { padding: 11px 22px; border: 0; border-radius: 8px; background: #176858; color: white; font: inherit; cursor: pointer; }
+        button:hover { background: #105144; }
+        button:focus-visible, a:focus-visible { outline: 3px solid #3876b1; outline-offset: 4px; }
+        .hint { margin: 8px 0 18px; font-size: 14px; }
+        .error { color: #a42121; }
+        .result { border-left: 4px solid #176858; }
+        h2 { margin: 0 0 12px; font-size: 21px; }
+        .query { white-space: pre-wrap; overflow-wrap: anywhere; }
+        .answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .answer-card { margin-top: 0; padding: 22px; }
+        .answer-card h3 { margin: 0 0 8px; font-size: 18px; }
+        .answer { white-space: pre-wrap; overflow-wrap: anywhere; }
+        .answers-heading { margin-top: 28px; }
+        @media (max-width: 600px) { .answers { grid-template-columns: 1fr; } }
+        a { color: #176858; }
+        footer { margin-top: 26px; color: #536675; font-size: 14px; }
+        .account-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 24px; }
+        .account-nav span { overflow-wrap: anywhere; }
+        .account-nav button { padding: 5px 12px; background: #e7eeec; color: #175e54; }
+    </style>
+</head>
+<body>
+<main>
+    <nav class="account-nav" aria-label="账号导航">
+        <span>{{ user.first_name|default:user.username }} · {{ user.username }}</span>
+        <a href="{% url 'dashboard' %}">个人页面</a>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">退出登录</button>
+        </form>
+    </nav>
+    <span class="badge">开发练习 · 第 2 步 · 模拟回答</span>
+    <h1>从一个问题开始</h1>
+    <p class="intro">提交问题，通过检查后查看 10 条固定回答，验证完整的展示流程。</p>
+
+    <section class="card" aria-label="提交问题">
+        <form method="post" action="{% url 'index' %}">
+            {% csrf_token %}
+            <label for="query">你想提问什么？</label>
+            <textarea id="query" name="query" maxlength="5000" required aria-describedby="query-help{% if error %} query-error{% endif %}" placeholder="例如：为什么天空是蓝色的？">{{ query }}</textarea>
+            <p class="hint" id="query-help">最多 5000 个字符。本步骤使用固定模拟回答，尚未调用真实模型或保存问题。</p>
+            {% if error %}
+                <p class="error" id="query-error" role="alert">{{ error }}</p>
+            {% endif %}
+            <button type="submit">获取模拟回答</button>
+        </form>
+    </section>
+
+    {% if submitted %}
+        <section class="card result" aria-labelledby="result-title">
+            <h2 id="result-title">已收到你的问题</h2>
+            <p class="query">{{ query }}</p>
+            <p class="hint">这是你提交的原文，不是模型回答。</p>
+            <a href="{% url 'index' %}">开始一次新输入</a>
+        </section>
+
+        <section aria-labelledby="answers-title">
+            <h2 class="answers-heading" id="answers-title">模拟回答 · {{ results|length }} 条</h2>
+            <p class="hint">下面是预先设置的固定值。修改问题不会改变这些回答。</p>
+            <div class="answers">
+                {% for result in results %}
+                    <article class="card answer-card" id="{{ result.model_id }}">
+                        <h3>{{ result.model_name }}</h3>
+                        <p class="answer">{{ result.answer }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <footer>模型评测网站 · 学习与开发进行中</footer>
+</main>
+</body>
+</html>

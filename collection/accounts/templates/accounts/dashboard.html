@@ -1,0 +1,19 @@
+{% extends "accounts/base.html" %}
+{% block title %}个人页面{% endblock %}
+{% block content %}
+    <h1>你好，{{ user.first_name|default:user.username }}</h1>
+    <p class="intro">这是你的个人页面。</p>
+    <dl>
+        <dt>学号</dt><dd>{{ user.username }}</dd>
+        <dt>姓名</dt><dd>{{ user.first_name|default:"未填写" }}</dd>
+    </dl>
+    <h2>开始一次评测</h2>
+    <p>提交一个问题，查看 10 条模拟回答。当前评测结果暂未保存，历史记录会在后续加入。</p>
+    <div class="actions">
+        <a class="button" href="{% url 'index' %}">进入评测页面</a>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="secondary" type="submit">退出登录</button>
+        </form>
+    </div>
+{% endblock %}
